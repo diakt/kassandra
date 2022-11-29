@@ -19,7 +19,7 @@ const (
 func Seed(){
 	fmt.Printf("In Seed\n")
 	
-	conn_details := fmt.Sprintf("host=%s port=%d user=%s dbname=%s", host, port, user, dbname)
+	conn_details := fmt.Sprintf("host=%s port=%d user=%s dbname=%s sslmode=disable", host, port, user, dbname)
 	connection, err := sql.Open("postgres", conn_details)
 	if err!=nil{
 		fmt.Println("Something in connection open died.")

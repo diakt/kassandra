@@ -36,6 +36,14 @@ func Routing(){
 	router.GET("/athletes", controller.GetAthletes)
 	router.GET("/athletes/:athlete", controller.GetAthlete)
 
+	//coxswains
+	router.GET("/coxswains", controller.GetCoxswains)
+	router.GET("/coxswains/:coxswain", controller.GetCoxswain)
+
+	//athletes
+	router.GET("/shells", controller.GetShells)
+	router.GET("/shells/:shell", controller.GetShell)
+
 	//otherwise
 	router.NoRoute(lost)
 
