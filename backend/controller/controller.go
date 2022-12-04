@@ -156,6 +156,8 @@ func GetBoats(c *gin.Context){
 	db.Close()
 
 	c.IndentedJSON(200, boats)
+
+
 	
 
 }
@@ -183,6 +185,19 @@ func GetBoat(c *gin.Context){
 
 	c.IndentedJSON(200, boats)
 
+}
+
+func PostBoat(c *gin.Context){
+	db := OpenConnection()
+	var boat models.Boat
+	c.BindJSON(&boat)
+	query := fmt.Sprintf("INSERT INTO boats (bow, two, three, four, five, six, seven, eight, cox, shell) VALUES (%d, %d, %d, %d, %d, %d, %d, %d, %d, %d)", boat.Bow, boat.Two, boat.Three, boat.Four, boat.Five, boat.Six, boat.Seven, boat.Eight, boat.Cox, boat.Shell)
+	_, err := db.Exec(query)
+	if err!=nil{
+		log.Fatal(err)
+	}
+
+	c.IndentedJSON(200, boat)
 }
 
 
@@ -233,6 +248,37 @@ func GetAthlete(c *gin.Context){
 
 }
 
+func PostAthlete(c *gin.Context) {
+	// Create a new athlete from the request body
+	athlete := new(models.Athlete)
+	// Bind the request body to the new athlete
+    err := c.ShouldBind(&athlete)
+	// If there was an error, return a four hundo
+    if err != nil {
+        log.Fatal(err)
+    }
+	
+
+	// Insert the athlete into the database
+    db := OpenConnection()
+	// Create a query to insert the athlete into the database
+    query := fmt.Sprintf("INSERT INTO athletes (ath_id, ath_name, ath_2k_watt, ath_6k_watt) VALUES (DEFAULT, %s, %d, %d)", athlete.Ath_name, athlete.Ath_2k_watt, athlete.Ath_6k_watt)
+	// Execute the query
+    _, err = db.Exec(query)
+	// If there was an error, send five hundo
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    c.IndentedJSON(200, athlete)
+}
+
+
+
+
+
+
+
 
 func GetCoxswains(c *gin.Context){
 	db := OpenConnection()
@@ -281,6 +327,32 @@ func GetCoxswain(c *gin.Context){
 
 }
 
+func PostCoxswain(c *gin.Context) {
+    // Parse the request body to get the new coxswain object
+    coxswain := new(models.Coxswain)
+    err := c.ShouldBind(&coxswain)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    db := OpenConnection()
+    if err != nil {
+        log.Fatal(err)
+    }
+    query := fmt.Sprintf("INSERT INTO coxswains (cox_id, cox_name, cox_weight) VALUES (DEFAULT, '%s', %d)", coxswain.Cox_name, coxswain.Cox_weight)
+
+    _, err = db.Exec(query)
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    c.IndentedJSON(200, coxswain)
+}
+
+
+
+
+
 
 func GetShells(c *gin.Context){
 	db := OpenConnection()
@@ -327,4 +399,26 @@ func GetShell(c *gin.Context){
 
     c.IndentedJSON(200, shells)
 
+}
+
+func PostShells(c *gin.Context) {
+	// Parse the request body to get the new shell object
+	shell := new(models.Shell)
+	err := c.ShouldBind(&shell)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db := OpenConnection()
+	if err != nil {
+		log.Fatal(err)
+	}
+	query := fmt.Sprintf("INSERT INTO shells (shell_id, shell_name) VALUES (DEFAULT, '%s')", shell.Shell_name)
+
+	_, err = db.Exec(query)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c.IndentedJSON(200, shell)
 }
